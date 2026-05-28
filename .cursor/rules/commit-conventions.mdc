@@ -1,0 +1,35 @@
+---
+description: Conventional commit message format for this project
+alwaysApply: true
+---
+
+# Generate Commit Guidelines
+
+When the user asks for a commit, use this format.
+
+## Types
+
+- `fix:` — bug fix (PATCH)
+- `feat:` — new feature (MINOR)
+- Also allowed: `chore:`, `docs:`, `style:`, `refactor:`, `perf:`, `test:`, etc.
+
+Optional scope in parentheses: `feat(hero): add entrance animation`
+
+## Subject and body
+
+- Format: `<type>[optional scope]: <description>`
+- **Imperative mood** in the subject (e.g. `add`, `fix`, `update`).
+- **No period** at the end of the subject line.
+- Use the body to explain **what** and **why**, not step-by-step how.
+
+## Examples
+
+```
+feat(hero): add Motion entrance animation
+
+Improve first paint perception on the landing section without layout shift.
+```
+
+```
+fix(nav): restore keyboard focus trap on mobile menu
+```

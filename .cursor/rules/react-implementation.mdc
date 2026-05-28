@@ -1,0 +1,111 @@
+---
+description: React/JSX implementation standards (Tailwind, a11y, style)
+globs: "**/*.{jsx,tsx,js,ts}"
+alwaysApply: false
+---
+
+# Code Implementation Guidelines
+
+Apply when writing or editing React/JSX in this project.
+
+## Style and structure
+
+- Use **early returns** for readability.
+- Style with **Tailwind `className` only** on elements; avoid new CSS files or inline `style` unless unavoidable (e.g. dynamic values Motion needs via `style` or motion values).
+- Prefer **`clsx` / `cn()`** (or a small helper) for conditional classes instead of long ternary chains in `className`.
+- Use **`const` arrow functions** for components and handlers; add TypeScript types when using `.tsx`.
+- **Do not use semicolons** at the end of statements.
+
+## Naming
+
+- Descriptive names for variables, components, and hooks.
+- Event handlers use a **`handle` prefix**: `handleClick`, `handleKeyDown`, `handleSubmit`.
+
+## Accessibility
+
+- Interactive non-native elements: `role`, `tabIndex={0}`, `aria-label` (or `aria-labelledby`), `onClick`, and `onKeyDown` (Enter/Space where appropriate).
+- Prefer semantic HTML (`button`, `a`, `nav`, `main`) before div+role.
+- Images: meaningful `alt`; decorative images use `alt=""`.
+- Preserve visible focus styles; do not remove outlines without a Tailwind replacement.
+
+## React patterns
+
+```jsx
+// ✅ Conditional classes
+import { clsx } from 'clsx'
+
+const Card = ({ active, children }) => (
+  <div className={clsx('rounded-lg p-4', active && 'ring-2 ring-blue-500')}>
+    {children}
+  </div>
+)
+
+// ✅ Accessible custom control
+const IconButton = ({ label, onClick }) => {
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      onClick?.()
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      className="rounded p-2 focus-visible:outline focus-visible:outline-2"
+    >
+      …
+    </button>
+  )
+}
+```
+
+## Animations (Motion)
+
+Use **[Motion](https://motion.dev)** — not `framer-motion`. Install: `npm install motion`.
+
+### React (this project)
+
+Import from **`motion/react`**:
+
+```jsx
+import { motion, AnimatePresence } from 'motion/react'
+import { useScroll, useSpring, useReducedMotion } from 'motion/react'
+
+const Hero = () => (
+  <motion.section
+    initial={{ opacity: 0, y: 16 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0 }}
+    whileHover={{ scale: 1.02 }}
+    whileInView={{ opacity: 1 }}
+    layout
+  >
+    …
+  </motion.section>
+)
+
+// Exit animations
+<AnimatePresence>
+  {show && <motion.div key="panel" exit={{ opacity: 0 }} />}
+</AnimatePresence>
+```
+
+### Vanilla / imperative (non-React utilities)
+
+Import from **`motion`**:
+
+```js
+import { animate, scroll, stagger } from 'motion'
+
+animate('.box', { rotate: 360 })
+animate('li', { y: 0, opacity: 1 }, { delay: stagger(0.1) })
+```
+
+See [quick start](https://motion.dev/docs/quick-start) and [React quick start](https://motion.dev/docs/react-quick-start).
+
+- Prefer declarative `motion.*` + props in components; use `animate()` / `scroll()` for DOM or one-off scripts.
+- Use `useReducedMotion` from `motion/react` and respect `prefers-reduced-motion` for non-essential animation.
