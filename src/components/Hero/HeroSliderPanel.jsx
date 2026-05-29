@@ -1,4 +1,4 @@
-const ServicesSliderPanel = ({ slide, transform }) => {
+const HeroSliderPanel = ({ slide, transform, priority = false }) => {
   const isFullscreen = transform.mode === 'fullscreen'
 
   const shared = {
@@ -14,20 +14,13 @@ const ServicesSliderPanel = ({ slide, transform }) => {
         src={slide.image}
         alt={slide.alt}
         className="absolute inset-0 h-full w-full object-cover"
-        loading="lazy"
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : 'auto'}
       />
       <div
-        className="absolute inset-0 bg-linear-to-t from-black/55 via-black/20 to-black/10"
+        className="absolute inset-0 bg-secondary/35"
         aria-hidden="true"
       />
-      <div
-        className="pointer-events-none absolute inset-0 flex items-center justify-center px-6 py-10 md:px-14 md:py-14"
-        style={{ opacity: transform.titleOpacity }}
-      >
-        <h2 className="max-w-3xl text-center text-xl leading-[1.12] font-medium tracking-tight text-primary-light sm:text-2xl md:text-4xl lg:text-[2.75rem]">
-          {slide.title}
-        </h2>
-      </div>
     </>
   )
 
@@ -36,7 +29,6 @@ const ServicesSliderPanel = ({ slide, transform }) => {
       <article
         className="absolute inset-0 overflow-hidden will-change-transform"
         style={shared}
-        aria-hidden={transform.titleOpacity < 0.05}
       >
         {content}
       </article>
@@ -52,11 +44,11 @@ const ServicesSliderPanel = ({ slide, transform }) => {
         height: `${transform.heightVh}vh`,
         transform: `translate(calc(-50% + ${transform.xVw}vw), -50%)`,
       }}
-      aria-hidden={transform.titleOpacity < 0.05}
+      aria-hidden="true"
     >
       {content}
     </article>
   )
 }
 
-export default ServicesSliderPanel
+export default HeroSliderPanel

@@ -1,9 +1,5 @@
 import { lerp } from '../../utils/lerp'
 
-/**
- * 1→2: encoger → paso horizontal sincronizado (hueco fijo) → crecer slide 2
- */
-
 const CARD_W = 68
 const CARD_H = 74
 const CARD_RADIUS = 52

@@ -1,47 +1,93 @@
-import { focusRing, glassShell, glassShellLogo } from '../../constants/brandGlass'
+import { focusRing } from '../../constants/brandGlass'
+import { heroNavLinks } from '../../data/heroSlides'
+import HeroMobileNav from './HeroMobileNav'
 
 const LOGO_SRC = '/images/logos/t&d-logo.png'
 
-const navLinks = [
-  { id: 'servicios', label: 'Servicios', href: '#servicios' },
-  { id: 'nosotros', label: 'Nosotros', href: '#nosotros' },
-  { id: 'contacto', label: 'Contacto', href: '#contacto' },
-]
+const SearchIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+    <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.5" />
+    <path
+      d="M12.5 12.5L16 16"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+)
+
+const MailIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <rect
+      x="1.5"
+      y="3.5"
+      width="13"
+      height="9"
+      rx="1.5"
+      stroke="currentColor"
+      strokeWidth="1.25"
+    />
+    <path
+      d="M1.5 5L8 9L14.5 5"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+    />
+  </svg>
+)
 
 const HeroNav = () => (
-  <nav
-    className="pointer-events-auto flex w-auto items-center justify-center gap-2 sm:gap-2.5 md:gap-3 lg:w-full lg:justify-between lg:gap-0"
-    aria-label="Navegación principal"
-  >
-    <a
-      href="/"
-      className={`flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full p-0 transition-transform hover:scale-[1.03] ${glassShellLogo} ${focusRing} md:h-auto md:w-auto md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none`}
-      aria-label="T&D Ingeniería — inicio"
+  <header className="relative z-50 w-full shrink-0 border-b border-secondary/8 bg-white">
+    <nav
+      className="mx-auto flex h-[72px] max-w-7xl items-center gap-4 px-4 sm:h-20 sm:px-6 lg:px-8"
+      aria-label="Navegación principal"
     >
-      <img
-        src={LOGO_SRC}
-        alt=""
-        className="h-auto w-full max-w-full scale-[1.35] object-contain object-center drop-shadow-[0_0_14px_rgba(238,246,220,0.55)] max-md:brightness-110 md:h-16 md:w-auto md:max-w-none md:scale-100 md:brightness-100 md:drop-shadow-[0_2px_20px_rgba(0,0,0,0.45)] lg:h-19 xl:h-28 2xl:h-32"
-      />
-    </a>
+      <a
+        href="/"
+        className={`flex shrink-0 items-center ${focusRing}`}
+        aria-label="T&D Ingeniería — inicio"
+      >
+        <img
+          src={LOGO_SRC}
+          alt="T&D Ingeniería"
+          className="h-12 w-auto object-contain sm:h-14 md:h-16"
+        />
+      </a>
 
-    <div
-      className={`flex h-14 shrink-0 items-center rounded-full px-1.5 md:h-auto md:px-2 md:py-1.5 lg:px-2.5 lg:py-2 ${glassShell}`}
-    >
-      <ul className="flex h-full items-center gap-0.5 md:h-auto">
-        {navLinks.map((link) => (
-          <li key={link.id} className="flex h-full items-center md:h-auto">
+      <ul className="hidden flex-1 items-center justify-center gap-6 lg:flex xl:gap-9">
+        {heroNavLinks.map((link) => (
+          <li key={link.id}>
             <a
               href={link.href}
-              className={`inline-flex h-full items-center justify-center rounded-full px-2.5 text-xs font-semibold leading-none tracking-wide text-primary-light transition-colors hover:bg-primary-light/15 sm:px-4 sm:text-sm md:h-auto md:px-5 md:py-2.5 md:leading-normal lg:px-6 lg:py-3 lg:text-base ${focusRing}`}
+              className={`text-[15px] font-medium text-secondary/75 transition-colors hover:text-secondary ${focusRing}`}
             >
               {link.label}
             </a>
           </li>
         ))}
       </ul>
-    </div>
-  </nav>
+
+      <div className="ml-auto flex items-center gap-2 sm:gap-3">
+        <button
+          type="button"
+          className={`hidden items-center justify-center p-2 text-secondary/60 transition-colors hover:text-secondary lg:flex ${focusRing}`}
+          aria-label="Buscar"
+        >
+          <SearchIcon />
+        </button>
+
+        <a
+          href="#contacto"
+          className={`hidden items-center gap-2 rounded-full border border-secondary/20 px-4 py-2 text-sm font-medium text-secondary transition-colors hover:border-secondary/40 hover:bg-primary-light/50 sm:inline-flex sm:px-5 sm:py-2.5 ${focusRing}`}
+        >
+          <MailIcon />
+          <span>Consulta gratis</span>
+        </a>
+
+        <HeroMobileNav links={heroNavLinks} />
+      </div>
+    </nav>
+  </header>
 )
 
 export default HeroNav

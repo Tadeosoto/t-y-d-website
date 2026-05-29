@@ -1,81 +1,102 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useMemo } from 'react'
 import { useReducedMotion } from 'motion/react'
-import { heroSlides, HERO_SLIDE_DURATION_MS } from '../../data/heroSlides'
-import HeroBackground from './HeroBackground'
-import HeroCarousel from './HeroCarousel'
-import HeroContent from './HeroContent'
+import {
+  heroSlides,
+  HERO_HOLD_MS,
+  HERO_TRANSITION_MS,
+} from '../../data/heroSlides'
+import { useHeroSlider } from '../../hooks/useHeroSlider'
+import HeroArrowButton from './HeroArrowButton'
 import HeroNav from './HeroNav'
-
-const getSlideDuration = (index, prefersReducedMotion) => {
-  const ms = heroSlides[index]?.durationMs ?? HERO_SLIDE_DURATION_MS
-  const safeMs = ms > 0 ? ms : HERO_SLIDE_DURATION_MS
-  return prefersReducedMotion ? safeMs * 1.5 : safeMs
-}
+import HeroSlideOverlay from './HeroSlideOverlay'
+import HeroSliderPanel from './HeroSliderPanel'
+import {
+  getIncomingTransform,
+  getOutgoingTransform,
+  HOLD_TRANSFORM,
+} from './heroSliderTransforms'
 
 const Hero = () => {
   const prefersReducedMotion = useReducedMotion()
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [progress, setProgress] = useState(0)
-  const rafRef = useRef(null)
-  const startRef = useRef(0)
+  const {
+    activeIndex,
+    phase,
+    transitionProgress,
+    outgoingIndex,
+    incomingIndex,
+    direction,
+    goToNext,
+    goToPrev,
+  } = useHeroSlider(
+    heroSlides.length,
+    HERO_HOLD_MS,
+    HERO_TRANSITION_MS,
+    prefersReducedMotion,
+  )
 
+  const outgoingTransform = useMemo(
+    () => getOutgoingTransform(transitionProgress, direction),
+    [transitionProgress, direction],
+  )
+
+  const incomingTransform = useMemo(
+    () => getIncomingTransform(transitionProgress, direction),
+    [transitionProgress, direction],
+  )
+
+  const showContent = phase === 'hold'
   const activeSlide = heroSlides[activeIndex]
-  const slideDuration = getSlideDuration(activeIndex, prefersReducedMotion)
-
-  const goToSlide = useCallback((index) => {
-    setActiveIndex(index % heroSlides.length)
-    setProgress(0)
-    startRef.current = performance.now()
-  }, [])
-
-  useEffect(() => {
-    startRef.current = performance.now()
-
-    const tick = (now) => {
-      const elapsed = now - startRef.current
-      const nextProgress = Math.min(elapsed / slideDuration, 1)
-      setProgress(nextProgress)
-
-      if (nextProgress >= 1) {
-        setProgress(0)
-        setActiveIndex((current) => (current + 1) % heroSlides.length)
-        return
-      }
-
-      rafRef.current = requestAnimationFrame(tick)
-    }
-
-    rafRef.current = requestAnimationFrame(tick)
-
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    }
-  }, [activeIndex, slideDuration])
 
   return (
     <section
-      className="relative flex min-h-svh w-full flex-col overflow-hidden"
+      id="servicios"
+      className="flex min-h-svh w-full flex-col bg-white"
       aria-label="Hero"
     >
-      <HeroBackground slide={activeSlide} slideKey={activeIndex} />
+      <HeroNav />
 
-      <div className="relative z-10 flex min-h-svh flex-col">
-        <header className="flex w-full justify-center px-4 pt-5 md:pt-8 lg:justify-stretch lg:pt-9 lg:pl-4 lg:pr-4 xl:pl-6 xl:pr-6 2xl:pl-8 2xl:pr-8">
-          <HeroNav />
-        </header>
+      <div className="relative min-h-0 flex-1">
+        <div className="absolute inset-0 overflow-hidden bg-primary-light">
+          {phase === 'hold' && (
+            <HeroSliderPanel
+              slide={heroSlides[activeIndex]}
+              transform={HOLD_TRANSFORM}
+              priority
+            />
+          )}
 
-        <div className="flex flex-1 flex-col items-center justify-center px-4 py-16">
-          <HeroContent />
+          {phase === 'transition' && (
+            <>
+              <HeroSliderPanel
+                slide={heroSlides[outgoingIndex]}
+                transform={outgoingTransform}
+              />
+              <HeroSliderPanel
+                slide={heroSlides[incomingIndex]}
+                transform={incomingTransform}
+              />
+            </>
+          )}
         </div>
 
-        <footer className="flex justify-center px-4 pb-8 sm:pb-10">
-          <HeroCarousel
-            slides={heroSlides}
-            activeIndex={activeIndex}
-            progress={progress}
-            onSelect={goToSlide}
+        <HeroSlideOverlay
+          slide={activeSlide}
+          slideKey={activeIndex}
+          visible={showContent}
+        />
+
+        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-5 md:px-8">
+          <HeroArrowButton
+            direction="prev"
+            label="Slide anterior"
+            onClick={goToPrev}
           />
-        </footer>
+          <HeroArrowButton
+            direction="next"
+            label="Slide siguiente"
+            onClick={goToNext}
+          />
+        </div>
       </div>
     </section>
   )

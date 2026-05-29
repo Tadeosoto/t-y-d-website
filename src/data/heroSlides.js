@@ -1,38 +1,53 @@
-const gif = (name) => `/images/gifs-bg/${name}`
+export const HERO_HOLD_MS = 7000
+export const HERO_TRANSITION_MS = 2200
+/** Texto entra después de que las ondas del círculo terminan el bounce */
+export const HERO_TEXT_FADE_DELAY_S = 0.55
 
-/**
- * Duración de un ciclo completo del GIF (ms), medida del archivo local.
- * El timer del carousel y el borde de progreso usan este valor.
- */
 export const heroSlides = [
   {
-    id: 'electricas',
-    label: 'Instalaciones eléctricas',
-    background: gif('instalando-luces.gif'),
-    thumbnail: gif('instalando-luces.gif'),
-    durationMs: 25100,
+    id: 'interiores',
+    eyebrow: 'Espacios corporativos',
+    title: 'Mantenimiento y adecuación de interiores empresariales',
+    subtitle:
+      'Diseñamos, ejecutamos y mantenemos ambientes de trabajo con estándares corporativos y ejecución eficiente.',
+    badgeLines: ['Calidad', 'garantizada'],
+    cta: 'Conocer más',
+    ctaHref: '#nosotros',
+    image:
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&q=80&auto=format&fit=crop',
+    alt: 'Oficina corporativa con acabados de interiores',
   },
   {
     id: 'solar',
-    label: 'Instalación de paneles solares',
-    background: gif('paneles-solares.gif'),
-    thumbnail: gif('paneles-solares.gif'),
-    durationMs: 14400,
+    eyebrow: 'Energía solar',
+    title: 'Instalación de paneles solares para empresas',
+    subtitle:
+      'Soluciones fotovoltaicas con supervisión técnica, cumplimiento normativo y ahorro energético medible.',
+    badgeLines: ['Ejecución', 'certificada'],
+    cta: 'Solicitar asesoría',
+    ctaHref: '#contacto',
+    image:
+      'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1400&q=80&auto=format&fit=crop',
+    alt: 'Paneles solares en cubierta industrial',
   },
   {
-    id: 'interiores-2',
-    label: 'Diseño de interiores corporativos',
-    background: gif('oficinas-interiores-2.gif'),
-    thumbnail: gif('oficinas-interiores-2.gif'),
-    durationMs: 8400,
-  },
-  {
-    id: 'interiores',
-    label: 'Mantenimiento de interiores',
-    background: gif('oficinas-interiores.gif'),
-    thumbnail: gif('oficinas-interiores.gif'),
-    durationMs: 30600,
+    id: 'electrico',
+    eyebrow: 'Instalaciones eléctricas',
+    title: 'Obra civil e instalaciones de baja y media tensión',
+    subtitle:
+      'Proyectos integrales para oficinas e industria: eléctrico, mobiliario y adecuaciones con un solo equipo.',
+    badgeLines: ['Supervisión', 'técnica'],
+    cta: 'Contáctanos',
+    ctaHref: '#contacto',
+    image:
+      'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1400&q=80&auto=format&fit=crop',
+    alt: 'Instalación eléctrica en entorno industrial',
   },
 ]
 
-export const HERO_SLIDE_DURATION_MS = 6000
+export const heroNavLinks = [
+  { id: 'inicio', label: 'Inicio', href: '#servicios' },
+  { id: 'nosotros', label: 'Nosotros', href: '#nosotros' },
+  { id: 'servicios', label: 'Servicios', href: '#servicios' },
+  { id: 'contacto', label: 'Contacto', href: '#contacto' },
+]

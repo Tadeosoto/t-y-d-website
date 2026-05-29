@@ -8,7 +8,7 @@ const getDirection = (from, to, count) => {
   return diff > 0 ? 1 : -1
 }
 
-export const useServicesSlider = (
+export const useHeroSlider = (
   slideCount,
   holdMs,
   transitionMs,
@@ -110,6 +110,14 @@ export const useServicesSlider = (
     }
   }, [incomingIndex, phase, transitionDuration])
 
+  const goToNext = useCallback(() => {
+    goToSlide((activeIndex + 1) % slideCount)
+  }, [activeIndex, goToSlide, slideCount])
+
+  const goToPrev = useCallback(() => {
+    goToSlide((activeIndex - 1 + slideCount) % slideCount)
+  }, [activeIndex, goToSlide, slideCount])
+
   return {
     activeIndex,
     phase,
@@ -119,5 +127,7 @@ export const useServicesSlider = (
     incomingIndex,
     direction,
     goToSlide,
+    goToNext,
+    goToPrev,
   }
 }
