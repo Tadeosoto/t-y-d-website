@@ -111,12 +111,14 @@ export const useHeroSlider = (
   }, [incomingIndex, phase, transitionDuration])
 
   const goToNext = useCallback(() => {
+    if (phase !== 'hold') return
     goToSlide((activeIndex + 1) % slideCount)
-  }, [activeIndex, goToSlide, slideCount])
+  }, [activeIndex, goToSlide, phase, slideCount])
 
   const goToPrev = useCallback(() => {
+    if (phase !== 'hold') return
     goToSlide((activeIndex - 1 + slideCount) % slideCount)
-  }, [activeIndex, goToSlide, slideCount])
+  }, [activeIndex, goToSlide, phase, slideCount])
 
   return {
     activeIndex,

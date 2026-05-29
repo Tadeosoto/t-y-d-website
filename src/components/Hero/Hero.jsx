@@ -1,5 +1,6 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useReducedMotion } from 'motion/react'
+import { useHeroSwipe } from '../../hooks/useHeroSwipe'
 import {
   heroSlides,
   HERO_HOLD_MS,
@@ -7,7 +8,6 @@ import {
 } from '../../data/heroSlides'
 import { useHeroSlider } from '../../hooks/useHeroSlider'
 import HeroArrowButton from './HeroArrowButton'
-import HeroNav from './HeroNav'
 import HeroSlideOverlay from './HeroSlideOverlay'
 import HeroSliderPanel from './HeroSliderPanel'
 import {
@@ -46,16 +46,25 @@ const Hero = () => {
 
   const showContent = phase === 'hold'
   const activeSlide = heroSlides[activeIndex]
+  const swipeRef = useRef(null)
+
+  useHeroSwipe(swipeRef, {
+    enabled: phase === 'hold',
+    onSwipeLeft: goToNext,
+    onSwipeRight: goToPrev,
+  })
 
   return (
     <section
       id="servicios"
-      className="flex min-h-svh w-full flex-col bg-white"
+      className="relative min-h-svh w-full bg-white"
       aria-label="Hero"
     >
-      <HeroNav />
-
-      <div className="relative min-h-0 flex-1">
+      <div
+        ref={swipeRef}
+        className="absolute inset-0 touch-pan-y md:touch-auto"
+        aria-label="Carrusel de servicios. Desliza horizontalmente para cambiar de slide en móvil."
+      >
         <div className="absolute inset-0 overflow-hidden bg-primary-light">
           {phase === 'hold' && (
             <HeroSliderPanel
@@ -85,7 +94,7 @@ const Hero = () => {
           visible={showContent}
         />
 
-        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-5 md:px-8">
+        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-30 hidden items-center justify-between px-3 md:flex md:px-8">
           <HeroArrowButton
             direction="prev"
             label="Slide anterior"

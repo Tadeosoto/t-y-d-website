@@ -1,4 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { Link } from 'react-router-dom'
 import { focusRing } from '../../constants/brandGlass'
 import { HERO_TEXT_FADE_DELAY_S } from '../../data/heroSlides'
 import HeroQualityBadge from './HeroQualityBadge'
@@ -90,31 +91,30 @@ const HeroSlideOverlay = ({ slide, slideKey, visible }) => {
                   {slide.subtitle}
                 </motion.p>
 
-                <motion.a
-                  custom={3}
-                  variants={itemVariants}
-                  layout={false}
-                  href={slide.ctaHref}
-                  className={`group mt-8 inline-flex translate-z-0 items-stretch overflow-hidden rounded-full bg-linear-to-r from-primary to-secondary text-primary-light shadow-lg backface-hidden hover:brightness-[1.03] ${focusRing}`}
-                >
-                  <span className="flex items-center px-7 py-3.5 text-sm font-semibold tracking-wide sm:px-8 sm:text-base">
-                    {slide.cta}
-                  </span>
-                  <span
-                    className="m-1.5 flex w-11 shrink-0 items-center justify-center rounded-full bg-primary-light text-secondary transition-transform group-hover:translate-x-0.5"
-                    aria-hidden="true"
+                <motion.div custom={3} variants={itemVariants} layout={false}>
+                  <Link
+                    to={slide.ctaHref}
+                    className={`group mt-8 inline-flex translate-z-0 items-stretch overflow-hidden rounded-full bg-linear-to-r from-primary to-secondary text-primary-light shadow-lg backface-hidden hover:brightness-[1.03] ${focusRing}`}
                   >
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M3 8H13M13 8L9 4M13 8L9 12"
-                        stroke="currentColor"
-                        strokeWidth="1.75"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                </motion.a>
+                    <span className="flex items-center px-7 py-3.5 text-sm font-semibold tracking-wide sm:px-8 sm:text-base">
+                      {slide.cta}
+                    </span>
+                    <span
+                      className="m-1.5 flex w-11 shrink-0 items-center justify-center rounded-full bg-primary-light text-secondary transition-transform group-hover:translate-x-0.5"
+                      aria-hidden="true"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path
+                          d="M3 8H13M13 8L9 4M13 8L9 12"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </Link>
+                </motion.div>
               </motion.div>
             </motion.div>
           )}

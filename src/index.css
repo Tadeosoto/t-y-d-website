@@ -20,8 +20,15 @@
 
   html {
     font-family: var(--font-sans);
+    scroll-padding-top: 5.5rem;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (min-width: 40rem) {
+    html {
+      scroll-padding-top: 6rem;
+    }
   }
 
   body {
